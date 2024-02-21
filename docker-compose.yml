@@ -19,16 +19,16 @@ services:
     image: phpmyadmin
     restart: always
     ports:
-      - 8080:80
-    environment:
-      - PMA_HOST=db
+      - 9091:80
+    # environment:
+    #   - PMA_HOST=db
 
   node-app:
     build:
       context: ./app
       dockerfile: Dockerfile
     ports:
-      - '3000:3000'
+      - '4000:3000'
     depends_on:
       - db
     environment:
