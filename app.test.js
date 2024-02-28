@@ -211,6 +211,52 @@ describe('Movements endpoint', () => {
       })
   })
 
+  it('should handle missing or invalid movement object', (done) => {
+    request(app)
+      .post('/movements')
+      .query({ token })
+      .expect(400)
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.body.message).to.equal('Invalid movement object')
+        done()
+      })
+  })
+
+  it('should handle invalid amount field', (done) => {
+    const invalidAmountMovement = {
+      movement: { amount: 'invalid_amount', date: new Date().toISOString() },
+      account: accounts[0],
+    }
+    request(app)
+      .post('/movements')
+      .query({ token })
+      .send(invalidAmountMovement)
+      .expect(400)
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.body.message).to.equal('Invalid amount')
+        done()
+      })
+  })
+
+  it('should handle invalid date field format', (done) => {
+    const invalidDateFormatMovement = {
+      movement: { amount: 100, date: 'invalid_date_format' },
+      account: accounts[0],
+    }
+    request(app)
+      .post('/movements')
+      .query({ token })
+      .send(invalidDateFormatMovement)
+      .expect(400)
+      .end((err, res) => {
+        if (err) return done(err)
+        expect(res.body.message).to.equal('Invalid date format')
+        done()
+      })
+  })
+
   it('should handle unauthorized access', (done) => {
     request(app).post('/movements').expect(401).end(done)
   })

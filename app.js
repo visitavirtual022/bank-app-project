@@ -71,15 +71,41 @@ app.post('/movements', (req, res) => {
   debugLog('Received a movement request.')
   const token = req.query.token
   const movement = req.body.movement
-  const account = req.body.account
 
   jwt.verify(token, 'secret_key', (err, decoded) => {
     if (err) {
       debugLog('Unauthorized request.')
       return res.status(401).json({ message: 'Unauthorized' })
     }
-
     debugLog(`Authorized movement request for user: ${decoded.username}`)
+
+    // Validate the movement object
+    if (
+      !movement ||
+      typeof movement !== 'object' ||
+      !movement.hasOwnProperty('amount') ||
+      !movement.hasOwnProperty('date')
+    ) {
+      debugLog('Invalid movement object.')
+      return res.status(400).json({ message: 'Invalid movement object' })
+    }
+
+    // Validate the amount field
+    if (typeof movement.amount !== 'number' || movement.amount <= 0) {
+      debugLog('Invalid amount.')
+      return res.status(400).json({ message: 'Invalid amount' })
+    }
+
+    // Validate the date field format
+    const dateFormatRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/
+    if (
+      typeof movement.date !== 'string' ||
+      !dateFormatRegex.test(movement.date)
+    ) {
+      debugLog('Invalid date format.')
+      return res.status(400).json({ message: 'Invalid date format' })
+    }
+
     // Perform movement update logic here
     const accountIndex = accounts.findIndex(
       (acc) => acc.username === decoded.username
@@ -97,7 +123,10 @@ app.post('/movements', (req, res) => {
         debugLog('Insufficient balance.')
         return res.status(400).json({ message: 'Insufficient balance' })
       }
-      accounts[accountIndex].movements.push(movement)
+      accounts[accountIndex].movements.push({
+        amount: movement.amount,
+        date: new Date().toISOString(),
+      })
       debugLog('Movements updated successfully.')
       res.json({ message: 'Movements updated' })
     } else {
