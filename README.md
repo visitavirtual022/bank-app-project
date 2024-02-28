@@ -12,7 +12,9 @@ El objetivo es realizar una pequeña aplicación en React o JavaScript con la si
   - Dirección
 - Poder realizar ingresos o retiradas de dinero.
 - Poder realizar transferencias a cuentas de otros usuarios
-- Puedes apoyaerte en el desarrollo que ya hicimos en https://github.com/juanda99/banco-app y en la documentación de Obsidian relacionada.
+- Puedes apoyarte en el desarrollo que ya hicimos en https://github.com/juanda99/banco-app y en la documentación de Obsidian relacionada.
+
+La aplicación se puede realizar en parejas. En este caso recomiendo el uso de react para que, al trabajar con varios ficheros (componentes) no os solapéis escribiendo el código.
 
 ## Servidor
 
@@ -25,6 +27,7 @@ El objetivo es realizar una pequeña aplicación en React o JavaScript con la si
 
 ## Requerimientos
 
+- Realiza un fork del repositorio y trabaja en tu propio repositorio. Deberás hacer un commit por cada funcionalidad o error de código que implementes. En caso de hacer el proyecto con otra persona, deberá haber commits de ambos.
 - Se valorará que utilices varias tecnologías o que profundices en el uso de alguna. Ejemplos:
   - Realizar la aplicación tanto en React como en JavaScript
   - Uso de algún framwork de CSS
